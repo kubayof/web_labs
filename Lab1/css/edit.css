@@ -1,0 +1,15 @@
+main {
+    padding: 10px;
+    margin: 10px;
+}
+
+@media screen and (min-width: 800px) {
+    main {
+        margin: 10px 100px;
+    }
+}
+
+.btn {
+    margin-top: 10px;
+}
+
