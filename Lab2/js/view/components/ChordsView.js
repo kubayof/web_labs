@@ -91,6 +91,10 @@ export default class ChordsView {
     }
 
     canDelete() {
-        return this.controller.userPrincipalService.userPrincipal.id === this.chords.userId;
+        const userPrincipal = this.controller.userPrincipalService.userPrincipal;
+        if ((userPrincipal === undefined) || (userPrincipal === null)) {
+            return false;
+        }
+        return userPrincipal.id === this.chords.userId;
     }
 }
