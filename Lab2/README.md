@@ -8,6 +8,7 @@ __Інструменти розробки:__ мови HTML5, CSS3, Javascript.
 __Зауваження:__ Web-фреймворки (ReactJS, AngularJS, VueJS) не використовувати!
 
 ## Результат:
+#### [Спробувати у браузері](https://kubayof.github.io/web_labs)
 ### Навігаційна панель після авторизації:
 ![Navbar signed in](screenshots/navbar_signed_in.png)
 ### Головна сторінка після авторизації:
