@@ -9,16 +9,16 @@ import SignUpView from "./SignUpView.js";
 
 
 export default class ContentWrapperView {
-    constructor(controller) {
+    constructor(viewFacade) {
         this.jumbotronView = new JumbotronView();
-        this.navbarView = new NavbarView(controller);
+        this.navbarView = new NavbarView(viewFacade);
         this.viewRegistry = {
-            "home": new HomeView(controller),
-            "workspace": new WorkspaceView(controller),
-            "my_account": new MyAccountView(controller),
-            "about": new AboutView(controller),
-            "sign_in": new SignInView(controller),
-            "sign_up": new SignUpView(controller)
+            "home": new HomeView(viewFacade),
+            "workspace": new WorkspaceView(viewFacade),
+            "my_account": new MyAccountView(viewFacade.modelFacade),
+            "about": new AboutView(),
+            "sign_in": new SignInView(viewFacade),
+            "sign_up": new SignUpView(viewFacade)
         }
         this.contentView = this.viewRegistry['home'];
     }
@@ -26,30 +26,6 @@ export default class ContentWrapperView {
     registerListeners() {
         this.navbarView.registerListeners();
         this.contentView.registerListeners();
-    }
-
-    onHome() {
-        this.setContentViewName('home');
-    }
-
-    onWorkspace() {
-        this.setContentViewName('workspace');
-    }
-
-    onMyAccount() {
-        this.setContentViewName('my_account');
-    }
-
-    onAbout() {
-        this.setContentViewName('about');
-    }
-
-    onSignIn() {
-        this.setContentViewName('sign_in');
-    }
-
-    onSignUp() {
-        this.setContentViewName('sign_up');
     }
 
     setContentViewName(contentViewName) {

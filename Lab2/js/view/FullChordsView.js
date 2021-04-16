@@ -1,10 +1,9 @@
 import CommentsView from "./components/CommentsView.js";
 
 export default class FullChordsView {
-    constructor(controller, chords) {
-        this.controller = controller;
+    constructor(viewFacade, chords) {
         this.chords = chords;
-        this.chordsView = new CommentsView(controller, this.chords);
+        this.chordsView = new CommentsView(viewFacade, this.chords);
     }
 
     registerListeners() {

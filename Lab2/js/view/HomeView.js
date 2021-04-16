@@ -1,8 +1,8 @@
 import ChordsModelListView from "./components/ChordsModelListView.js";
 
 export default class HomeView {
-    constructor(controller) {
-        this.controller = controller;
+    constructor(viewFacade) {
+        this.viewFacade = viewFacade;
     }
 
     registerListeners() {
@@ -10,7 +10,7 @@ export default class HomeView {
     }
 
     toHtml() {
-        this.chordsModelListView = new ChordsModelListView(this.controller);
+        this.chordsModelListView = new ChordsModelListView(this.viewFacade);
         return this.chordsModelListView.toHtml();
     }
 }

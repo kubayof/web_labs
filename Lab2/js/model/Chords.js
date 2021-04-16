@@ -10,10 +10,6 @@ export default class Chords {
         this.comments = [];
     }
 
-    setText(text) {
-        this.text = text;
-    }
-
     addComment(comment) {
         this.comments.push(comment);
         //TODO: send comment to server && update local comments

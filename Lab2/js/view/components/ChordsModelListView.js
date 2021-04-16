@@ -1,9 +1,9 @@
 import ChordsView from "./ChordsView.js";
 
 export default class ChordsModelListView {
-    constructor(controller) {
-        this.controller = controller;
-        this.chordsViewList = controller.chordsModelList.items.map(chords => new ChordsView(controller, chords));
+    constructor(viewFacade) {
+        this.chordsViewList = viewFacade.modelFacade.chordsModelList.items
+            .map(chords => new ChordsView(viewFacade, chords));
     }
 
     registerListeners() {

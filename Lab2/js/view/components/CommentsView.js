@@ -2,13 +2,13 @@ import CommentView from "./CommentView.js";
 import Comment from '../../model/Comment.js';
 
 export default class CommentsView {
-    constructor(controller, chords) {
-        this.controller = controller;
+    constructor(viewFacade,chords) {
+        this.viewFacade = viewFacade;
         this.chords = chords;
     }
 
     registerListeners() {
-        if (this.controller.userPrincipalService.isAuthorized()) {
+        if (this.viewFacade.modelFacade.isAuthorized()) {
             document.getElementById("add_comment")
                 .addEventListener('submit', e => this.onAddComment(e));
         }
@@ -17,8 +17,8 @@ export default class CommentsView {
     onAddComment(e) {
         e.preventDefault();
         const formData = new FormData(document.getElementById("add_comment"));
-        this.chords.addComment(new Comment(this.controller.userPrincipalService.userPrincipal, formData.get('text'), new Date()));
-        // this.controller.addComment(formData.get('text'));
+        this.chords.addComment(new Comment(this.viewFacade.modelFacade.userPrincipalService.userPrincipal, formData.get('text'), new Date()));
+        this.viewFacade.addCommentCallback(formData.get('text'));
         this.repaint();
     }
 
@@ -62,7 +62,7 @@ export default class CommentsView {
     }
 
     addCommentHtml() {
-        if (this.controller.userPrincipalService.isAuthorized()) {
+        if (this.viewFacade.modelFacade.isAuthorized()) {
             return `
             <form id="add_comment">
                 <div class="form-group">

@@ -1,72 +1,56 @@
-import UserPrincipalService from "./UserPrincipalService.js";
-import ContentWrapperView from "../view/ContentWrapperView.js";
-import ChordsModelList from "../model/ChordsModelList.js";
-import newChords from "../default_init.js";
-import Chords from "../model/Chords.js";
+import ViewFacade from "../view/ViewFacade.js";
+import ModelFacade from "../model/ModelFacade.js";
+import WorkspaceView from "../view/WorkspaceView.js";
+import FullChordsView from "../view/FullChordsView.js";
 
 export default class Controller {
     constructor() {
-        this.userPrincipalService = new UserPrincipalService(this);
-        console.log()
-        // Model
-        this.chordsModelList = new ChordsModelList();
-        //TODO: remove default initialization
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-        this.chordsModelList.add(newChords())
-
-        // View
-        this.view = new ContentWrapperView(this);
-        document.body.innerHTML = this.view.toHtml();
+        this.modelFacade = new ModelFacade();
+        this.viewFacade = new ViewFacade(this.modelFacade);
+        document.body.innerHTML = this.viewFacade.toHtml();
         this.registerListeners();
-    }
-
-
-    loadMoreChords() {
-        // TODO: get chords from server
-        this.chordsModelList.add(newChords())
+        this.setCallbacks();
     }
 
     registerListeners() {
-        this.view.registerListeners();
+        this.viewFacade.registerListeners();
     }
 
-    addChords(name, author, text, date) {
-        //TODO: send also chords to the server
-        this.chordsModelList.add(new Chords(name, author, date, text, this.userPrincipalService.userPrincipal.id));
-        this.onHome();
-    }
+    setCallbacks() {
+        this.viewFacade.setNavbarOnHomeCallback(e => this.viewFacade.setContentViewName('home'));
+        this.viewFacade.setNavbarOnAboutCallback(e => this.viewFacade.setContentViewName('about'));
+        this.viewFacade.setNavbarOnWorkspaceCallback(e => this.viewFacade.setContentViewName('workspace'));
+        this.viewFacade.setNavbarOnMyAccountCallback(e => this.viewFacade.setContentViewName('my_account'));
+        this.viewFacade.setNavbarOnSignInCallback(e => this.viewFacade.setContentViewName('sign_in'));
+        this.viewFacade.setNavbarOnSignUpCallback(e => this.viewFacade.setContentViewName('sign_up'));
+        this.viewFacade.setNavbarOnSignOutCallback(e => {
+            this.modelFacade.signOut();
+            this.viewFacade.setContentViewName('home');
+        });
+        this.viewFacade.setWorkspaceOnAddChordsCallback((name, musician, postDate, text) => {
+            this.modelFacade.addChords(name, musician, postDate, text);
+            this.viewFacade.setContentViewName('home');
+        });
+        this.viewFacade.setOnSignInCallback((email, password) => {
+            this.modelFacade.signIn(email, password);
+            this.viewFacade.setContentViewName('home');
+        });
+        this.viewFacade.setOnSignUpCallback((name, email, password, gender, birthDate) => {
+            this.modelFacade.signUp(name, email, password, gender, birthDate);
+            this.viewFacade.setContentViewName('home');
+        });
+        this.viewFacade.setChordsViewOnViewCallback(chords => {
+            this.viewFacade.setContentView(new FullChordsView(this.viewFacade, chords));
+        });
+        this.viewFacade.setChordsViewOnEditCallback(chords => {
+            this.viewFacade.setContentView(new WorkspaceView(this.viewFacade, chords));
+        });
+        this.viewFacade.setChordsViewOnDeleteCallback(chords => {
+            this.modelFacade.removeChordsById(chords.id);
+            this.viewFacade.repaint();
+        });
+        this.viewFacade.setOnAddCommentCallback(text => {
 
-    onHome(e) {
-        this.view.setContentViewName('home');
-    }
-
-    onWorkspace(e) {
-        this.view.setContentViewName('workspace');
-    }
-
-    onMyAccount(e) {
-        this.view.setContentViewName('my_account');
-    }
-
-    onAbout(e) {
-        this.view.setContentViewName('about');
-    }
-
-    onSignIn(e) {
-        this.view.setContentViewName('sign_in');
-    }
-
-    onSignUp(e) {
-        this.view.setContentViewName('sign_up');
-    }
-
-    setContentView(contentView) {
-        this.view.setContentView(contentView);
+        });
     }
 }

@@ -1,6 +1,6 @@
 export default class WorkspaceView {
-    constructor(controller, chords = null) {
-        this.controller = controller;
+    constructor(viewFacade, chords = null) {
+        this.viewFacade = viewFacade;
         this.chords = chords;
     }
 
@@ -24,7 +24,7 @@ export default class WorkspaceView {
         const author = formData.get('author');
         const text = formData.get('text');
         const date = new Date();
-        this.controller.addChords(name, author, text, date);
+        this.viewFacade.workspaceOnAddChordsCallback(name, author, date, text);
     }
 
     toHtml() {

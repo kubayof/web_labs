@@ -1,50 +1,23 @@
-import View from "../View.js";
 import {registerListener} from "../Utils.js";
 
-export default class NavbarView extends View{
-    constructor(controller) {
-        super(controller);
+export default class NavbarView {
+    constructor(viewFacade) {
+        this.viewFacade = viewFacade;
         this.activeTab = 'home';
     }
-
     registerListeners() {
         registerListener("navbar_sign_out", (e) => this.onSignOut(e));
-        registerListener("navbar_sign_in", e => this.onSignIn(e))
-        registerListener("navbar_sign_up", e => this.onSignUp(e))
-        registerListener("navbar_home", e => this.onHome(e))
-        registerListener("navbar_workspace", e => this.onWorkspace(e))
-        registerListener("navbar_my_account", e => this.onMyAccount(e))
-        registerListener("navbar_about", e => this.onAbout(e))
-    }
-
-    onHome(e) {
-        this.controller.onHome(e);
-    }
-
-    onWorkspace(e) {
-        this.controller.onWorkspace(e);
-    }
-
-    onMyAccount(e) {
-        this.controller.onMyAccount(e);
-    }
-
-    onAbout(e) {
-        this.controller.onAbout(e);
-    }
-
-    onSignIn(e) {
-        this.controller.onSignIn(e);
-    }
-
-    onSignUp(e) {
-        this.controller.onSignUp(e)
+        registerListener("navbar_sign_in", e => this.viewFacade.navbarOnSignInCallback(e))
+        registerListener("navbar_sign_up", e => this.viewFacade.navbarOnSignUpCallback(e))
+        registerListener("navbar_home", e => this.viewFacade.navbarOnHomeCallback(e))
+        registerListener("navbar_workspace", e => this.viewFacade.navbarOnWorkspaceCallback(e))
+        registerListener("navbar_my_account", e => this.viewFacade.navbarOnMyAccountCallback(e))
+        registerListener("navbar_about", e => this.viewFacade.navbarOnAboutCallback(e))
     }
 
     onSignOut(e) {
-        this.controller.userPrincipalService.signOut();
+        this.viewFacade.navbarOnSignOutCallback(e);
         this.repaint();
-        this.controller.onHome();
     }
 
     repaint() {
@@ -129,5 +102,13 @@ export default class NavbarView extends View{
                     <a class="nav-link" id="navbar_sign_up" href="#">Sign Up</a>
                 </li>
                 `;
+    }
+
+    authorizedDisplayStyle() {
+        return this.viewFacade.modelFacade.userPrincipalService.isAuthorized() ? '' : 'style="display:none"';
+    }
+
+    notAuthorizedDisplayStyle() {
+        return this.viewFacade.modelFacade.userPrincipalService.isAuthorized() ? 'style="display:none"' : '';
     }
 }

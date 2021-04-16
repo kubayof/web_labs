@@ -1,6 +1,6 @@
 export default class SignInView {
-    constructor(controller) {
-        this.controller = controller;
+    constructor(viewFacade) {
+        this.viewFacade = viewFacade;
     }
 
     registerListeners() {
@@ -12,7 +12,7 @@ export default class SignInView {
         const formData = new FormData(document.getElementById('sign_in_form'));
         const email = formData.get('email');
         const password = formData.get('password');
-        this.controller.userPrincipalService.signIn(email, password);
+        this.viewFacade.onSignInCallback(email, password);
     }
 
     toHtml() {

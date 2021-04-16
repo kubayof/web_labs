@@ -1,37 +1,19 @@
-import FullChordsView from "../FullChordsView.js";
-import WorkspaceView from "../WorkspaceView.js";
 import {formatDate, registerListener} from "../Utils.js";
 
 export default class ChordsView {
-    constructor(controller, chords) {
-        this.controller = controller;
+    constructor(viewFacade, chords) {
+        this.viewFacade = viewFacade;
         this.chords = chords;
     }
 
     registerListeners() {
-        registerListener(this.viewLinkId(), e => this.onView(e));
-        if (this.controller.userPrincipalService.isAuthorized()) {
-            registerListener(this.editLinkId(), e => this.onEdit(e));
+        registerListener(this.viewLinkId(), e => this.viewFacade.chordsViewOnViewCallback(this.chords));
+        if (this.viewFacade.modelFacade.isAuthorized()) {
+            registerListener(this.editLinkId(), e => this.viewFacade.chordsViewOnEditCallback(this.chords));
         }
         if (this.canDelete()) {
-            registerListener(this.deleteLinkId(), e => this.onDelete(e));
+            registerListener(this.deleteLinkId(), e => this.viewFacade.chordsViewOnDeleteCallback(this.chords));
         }
-    }
-
-    onView(e) {
-        e.preventDefault();
-        this.controller.setContentView(new FullChordsView(this.controller, this.chords));
-    }
-
-    onEdit(e) {
-        e.preventDefault();
-        this.controller.setContentView(new WorkspaceView(this.controller, this.chords));
-    }
-
-    onDelete(e) {
-        e.preventDefault();
-        this.controller.chordsModelList.remove(this.chords.id);
-        this.controller.view.repaint();
     }
 
     viewLinkId() {
@@ -69,7 +51,7 @@ export default class ChordsView {
     }
 
     editButton() {
-        if (this.controller.userPrincipalService.isAuthorized()) {
+        if (this.viewFacade.modelFacade.userPrincipalService.isAuthorized()) {
             return `
                 <a class="btn btn-sm btn-outline-secondary" role="button" href="#"
                     id="${this.editLinkId()}">Edit</a>
@@ -91,7 +73,7 @@ export default class ChordsView {
     }
 
     canDelete() {
-        const userPrincipal = this.controller.userPrincipalService.userPrincipal;
+        const userPrincipal = this.viewFacade.modelFacade.userPrincipalService.userPrincipal;
         if ((userPrincipal === undefined) || (userPrincipal === null)) {
             return false;
         }

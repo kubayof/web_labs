@@ -1,6 +1,6 @@
 export default class SignUpView {
-    constructor(controller) {
-        this.controller = controller;
+    constructor(viewFacade) {
+        this.viewFacade = viewFacade;
     }
 
     registerListeners() {
@@ -15,7 +15,7 @@ export default class SignUpView {
         const password = formData.get('password');
         const gender = (formData.get('gender') === '1') ? 'male' : 'female';
         const birthDate = document.getElementById('birth_date');
-        this.controller.userPrincipalService.signUp(name, email, password, gender, new Date(birthDate.valueAsNumber));
+        this.viewFacade.onSignUpCallback(name, email, password, gender, new Date(birthDate.valueAsNumber));
     }
 
     toHtml() {
