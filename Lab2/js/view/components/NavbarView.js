@@ -22,7 +22,7 @@ export default class NavbarView {
 
     repaint() {
         const navbar = document.getElementById(this.rootElementName());
-        navbar.innerHTML = this.#innerHtml();
+        navbar.innerHTML = this.innerHtml();
         this.registerListeners();
     }
 
@@ -36,7 +36,7 @@ export default class NavbarView {
     toHtml() {
         return `
             <nav id="${this.rootElementName()}" class="navbar navbar-expand-lg navbar-dark bg-dark">
-                ${this.#innerHtml()}
+                ${this.innerHtml()}
             </nav>
         `;
     }
@@ -45,7 +45,7 @@ export default class NavbarView {
     /**
      * Returns only inner HTML
      */
-    #innerHtml() {
+    innerHtml() {
         return `
             <div class="container-fluid">
                 <a href="#" class="navbar-brand d-flex align-items-center">
@@ -58,7 +58,7 @@ export default class NavbarView {
                 <div class="collapse navbar-collapse" id="navbarCollapse">
                     <ul class="navbar-nav me-auto mb-2 mb-md-0">
                         ${this.navbarEntriesHtml()}
-                        ${this.#userNavbarEntriesHtml()}
+                        ${this.userNavbarEntriesHtml()}
                     </ul>
                     <form class="d-flex">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -84,7 +84,7 @@ export default class NavbarView {
         return (this.activeTab === tabName) ? 'active' : '';
     }
 
-    #userNavbarEntriesHtml() {
+    userNavbarEntriesHtml() {
         return `
                 <li class="nav-item" ${this.authorizedDisplayStyle()}>
                     <a class="nav-link" id="navbar_workspace" href="#">Workspace</a>

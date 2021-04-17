@@ -3,11 +3,11 @@ import CommentsView from "./components/CommentsView.js";
 export default class FullChordsView {
     constructor(viewFacade, chords) {
         this.chords = chords;
-        this.chordsView = new CommentsView(viewFacade, this.chords);
+        this.commentsView = new CommentsView(viewFacade, this.chords);
     }
 
     registerListeners() {
-        this.chordsView.registerListeners();
+        this.commentsView.registerListeners();
     }
 
     toHtml() {
@@ -42,6 +42,6 @@ export default class FullChordsView {
     }
 
     commentsHtml() {
-        return this.chordsView.toHtml();
+        return this.commentsView.toHtml();
     }
 }
