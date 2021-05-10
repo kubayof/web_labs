@@ -1,2 +1,8 @@
 .idea
 **.odt
+*.iml
+**/target
+**/node_modules
+**/dist
+**/webapp
+
